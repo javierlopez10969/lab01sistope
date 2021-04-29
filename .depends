@@ -1,1 +1,2 @@
- test.o: lab1.c funciones.h
+funciones.o: funciones.c estructuras.h funciones.h
+lab1.o: lab1.c funciones.h
