@@ -10,7 +10,7 @@
 mostrar: dimensiones de la imagen antes y después de aplicar zoom-in
 
 $ ./lab1 -I imagen1.raw -Z imagen1Z.raw -S imagen1S.raw -M 512 -N 512 -r 2
-./lab -I onion_135x198.raw -Z salidaZoom -S salidaSuave -M 10 -N 10 -r 10
+./lab1 -I cameraman_256x256.raw -Z salidaZoom -S salidaSuave -M 256 -N 256 -r 10
 */
 #include <ctype.h>
 #include <stdio.h>
@@ -77,26 +77,15 @@ int main (int argc, char **argv) {
             }
     printf ("Nombre imagen de entrada : %s \n Imagen zoom : %s \n Imagen Suavizado: %s \n filas : %d \n columnas : %d \n factor : %d \n bandera : %d\n",
            nombreImagen, imagenZoom, imagenSuavizado, filas, columnas, factor, bandera);
-
-    //cantidad de bytes
-    int N = (filas * columnas)*4;
+           
+    //Tamaño de bytes (N)
+    int N = (filas * columnas * 4);
     float *buffer=(float*)malloc(sizeof(float)*N);
+    leerArchivo(nombreImagen , filas, columnas, buffer,N);
+    printBuffer(filas,columnas,buffer);
+    zoomIN(filas, columnas, buffer, factor, N);
+    escribirImagen("camMan.raw",  filas,columnas,buffer, N);
 
-    int f1;
-    if ((f1 = open(nombreImagen,O_RDONLY)) == -1) {
-        printf("Error al abrir archivo\n");
-        exit(-1);
-    }
-
-    int nbytes;
-    if ((nbytes = read(f1, buffer, N)) != N) {
-        printf("Tamaño incorrercto de filas y columnas\n");
-        exit(-1);
-    }
-    close(f1);
-
-    for(int x = 0 ; x < columnas * filas; x++){
-      printf("%f ",buffer[x]);
-    }
-    
+    //liberar memoria
+    free (buffer);
 }
