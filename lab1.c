@@ -79,13 +79,20 @@ int main (int argc, char **argv) {
            nombreImagen, imagenZoom, imagenSuavizado, filas, columnas, factor, bandera);
            
     //Tamaño de bytes (N)
+
+
     int N = (filas * columnas * 4);
     float *buffer=(float*)malloc(sizeof(float)*N);
     leerArchivo(nombreImagen , filas, columnas, buffer,N);
-    printBuffer(filas,columnas,buffer);
-    zoomIN(filas, columnas, buffer, factor, N);
-    escribirImagen("camMan.raw",  filas,columnas,buffer, N);
-
+    //printBuffer(filas,columnas,buffer);
+    //Procesar el zoom in
+    float * zoom = NULL;
+    zoomIN(filas, columnas, buffer, &zoom, factor, N);
+    //printBuffer(filas*factor,columnas*factor,zoom);
+    escribirImagen(imagenZoom,filas*factor,columnas*factor,zoom , N*factor*factor);
+    
+    //Procesar el suavizado
+    //./lab1 -I cameraman_256x256.raw -Z salidaZoom.raw -S salidaSuave.raw -M 256 -N 256 -r 2
     //liberar memoria
     free (buffer);
 }

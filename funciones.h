@@ -10,7 +10,7 @@
 //Funcionamiento: explicar qué hace
 //Salidas: explicar qué se retorna
 int leerArchivo(char * pathname , int filas, int columnas,float * buffer,int N);
-float *  zoomIN(int filas, int columnas,float * buffer ,int factor, int N);
+void zoomIN(int filas, int columnas,float * buffer , float ** zoom, int factor, int N);
 void printBuffer(int filas, int columnas, float * buffer);
 int escribirImagen(char * salidaName , int filas, int columnas,float * buffer,int N);
 //fin de directivas
