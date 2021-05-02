@@ -32,7 +32,6 @@ int main (int argc, char **argv) {
     factor= 0 ;
     opterr= 0;
     opterr+=1;    
-    printf("Samuel\n");
     //el siguiente ciclo se utiliza para recibir los parametros de entrada usando getopt
     while ((c = getopt (argc, argv, "I:Z:S:M:N:r:b:")) != -1)
         switch (c)
@@ -84,13 +83,13 @@ int main (int argc, char **argv) {
     int N = (filas * columnas * 4);
     float *buffer=(float*)malloc(sizeof(float)*N);
     leerArchivo(nombreImagen , filas, columnas, buffer,N);
+    //escribirImagen(imagenZoom,filas,columnas,buffer, N);
     //printBuffer(filas,columnas,buffer);
     //Procesar el zoom in
     float * zoom = NULL;
     zoomIN(filas, columnas, buffer, &zoom, factor, N);
-    //printBuffer(filas*factor,columnas*factor,zoom);
+    //printBuffer(filas*factor, columnas*factor, zoom);
     escribirImagen(imagenZoom,filas*factor,columnas*factor,zoom , N*factor*factor);
-    
     //Procesar el suavizado
     //./lab1 -I cameraman_256x256.raw -Z salidaZoom.raw -S salidaSuave.raw -M 256 -N 256 -r 2
     //liberar memoria

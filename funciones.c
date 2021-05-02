@@ -24,7 +24,7 @@ int leerArchivo(char * pathname , int filas, int columnas,float * buffer,int N){
     return 1;
 }
 void printBuffer(int filas, int columnas, float * buffer){
-    int i = 0;
+    int i = 1;
     int k = 0;
     for(int j = 0 ; j < columnas *filas; j++){
       printf("%f, ",buffer[j]);
@@ -39,7 +39,7 @@ void printBuffer(int filas, int columnas, float * buffer){
 int escribirImagen(char * salidaName , int filas, int columnas,float * buffer,int N){
 
     int f2;
-    if ((f2 = open(salidaName, O_WRONLY | O_APPEND | O_CREAT, 0644)) == -1) {
+    if ((f2 = open(salidaName, O_WRONLY | O_CREAT , 0644)) == -1) {
         printf("Error al abrir archivo\n");
         exit(-1);
     }
@@ -65,49 +65,64 @@ int escribirImagen(char * salidaName , int filas, int columnas,float * buffer,in
 //Salidas: Nuevo buffer donde su contenido corresponde a la imagen posterior al proceso de zoom in.
 void zoomIN(int filas, int columnas,float * buffer , float ** zoom,int factor, int N){
     //(filas * factor) * (columnas * factor) * 4 = (N) * factor * factor
-    float * newBuffer = (float*)malloc(sizeof(float)*N*factor*factor);
+    float * newBuffer = (float*)malloc(sizeof(float)*N*factor);
     float elemento  = buffer[0];
     //Iterador que recorre el nuevo buffer
     int k = 0;
     int i = 0 ;
     int j = 0;
     int l = 0;
+    //Hacer las primeras N*factor columnas   * M filas
     while (i < filas*columnas){ 
         elemento  = buffer[i];
         //printf("buffer[%d] : %f \n",i ,elemento);
         //printf("k:%d, ",k);
-        j = k
-         while (j < factor){
+        j = 0;
+        while (j < factor){
             //aumentar por los lados y por abajo
             //Aumentamos por los lados
-            newBuffer [j] = elemento;
-            printf("ZOOM[%d] : %f \n",j,newBuffer[i]);
-            //Aumentar hacia abajo
-            l = j + (columnas*factor) + 1;
-            while (l < factor-1){
-                printf("ZOOM[%d] : %f \n",l,newBuffer[i]);
-                newBuffer[l] =  elemento;
-                l += columnas*factor;
-            }       
-            j++;     
+            newBuffer [k] = elemento;
+            //printf("[%d] : ", k);
+            //printf("%f ,",  newBuffer[k]);
+            k++; 
+            j++;         
         }
-        //Divison exacta entre el iterador del nuevo buffer entre las cantidad de columnas o filas
-        if(i != 0){
-            if ( i % columnas == 0){
-                //printf("\n AMIGA de 256 \n");
-                k = k + columnas*factor +1;
-            }else{
-                //Pasar a la siguiente columna aumentada
-                k = k + factor;
+        if(i!=0){
+            if(k%(columnas*factor) ==0){
+                //printf("\n\n fila %d \n\n", l);
+                l++;
             }
         }
-        else{
-            //Pasar a la siguiente columna aumentada
-            k = k + factor;
-        }
-        i++;
- 
+        i++; 
     }
-    //printBuffer(columnas,filas,);
-    *zoom = newBuffer;
+    i = 0;
+    j = 0;
+    k = 0;
+    l=0;
+    int z  = 0;
+    float * bufferFinal = (float*)malloc(sizeof(float)*N*factor*factor);
+    while (i < columnas*filas*factor*factor){
+        j=0;
+        while (j < factor){
+            l = 0;
+            k = z;
+            while(l < columnas*factor){
+                bufferFinal[i] = newBuffer[k]; 
+                //printf("i : %d,",i);
+                //printf("k : %d, \n",k);
+                l++;
+                i++;
+                k++;
+            }
+            j++;
+        }
+        z = k;
+
+    }
+    
+
+
+    //printBuffer(filas*factor,columnas*factor,newBuffer);
+    *zoom = bufferFinal; 
 }
+
